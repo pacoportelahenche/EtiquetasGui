@@ -43,6 +43,7 @@ import javax.swing.JTextField;
  */
 public class EtiquetasGUI extends javax.swing.JFrame {
     ImageIcon icono;
+    String NOMBRE_IMPRESORA = "ZDesigner LP 2844";
 
     /**
      * Constructor. Crea una nueva interfaz EtiquetasGUI.
@@ -51,6 +52,11 @@ public class EtiquetasGUI extends javax.swing.JFrame {
         URL url = this.getClass().getResource("recursos/zebra.jpeg");
         icono = new ImageIcon(url);
         initComponents();
+        setBotonPorDefecto();
+    }
+    
+    private void setBotonPorDefecto(){
+        this.getRootPane().setDefaultButton(this.botonImprimir);
     }
 
     /**
@@ -231,7 +237,7 @@ public class EtiquetasGUI extends javax.swing.JFrame {
         Doc doc;
         doc = new SimpleDoc(datos, DocFlavor.BYTE_ARRAY.AUTOSENSE, null);
         for (PrintService impresora : services) {
-            if (impresora.getName().equalsIgnoreCase("Zebra  LP2844")) {
+            if (impresora.getName().equalsIgnoreCase(this.NOMBRE_IMPRESORA)) {
                 DocPrintJob pj = impresora.createPrintJob();
                 try {
                     pj.print(doc, null);
@@ -239,16 +245,16 @@ public class EtiquetasGUI extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, ex.toString(),
                             "ERROR", JOptionPane.ERROR_MESSAGE);
                 }
+                return;
             }
-            else{
-                String mensaje = "No se ha encontrado la impresora "
+            
+        }
+        String mensaje = "No se ha encontrado la impresora "
                         + "Zebra LP2844. ¿Desea salir del programa?";
-                if(JOptionPane.showConfirmDialog(this, mensaje,
-                        "Impresora no encontrada",
-                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-                    System.exit(0);
-                }
-            }
+        if(JOptionPane.showConfirmDialog(this, mensaje,
+               "Impresora no encontrada",
+               JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+               System.exit(0);
         }
     }
 
@@ -550,12 +556,8 @@ public class EtiquetasGUI extends javax.swing.JFrame {
 
         /* Create and display the form */
         EtiquetasGUI eg = new EtiquetasGUI();
-        /*java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new EtiquetasGUI().setVisible(true);;
-            }
-        });*/
+        
+        
         Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
         int anchoPantalla = (int)d.getWidth();
         int altoPantalla = (int)d.getHeight();
